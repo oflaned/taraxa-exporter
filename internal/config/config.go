@@ -1,10 +1,10 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"sync"
 
+	"github.com/oflaned/taraxa-exporter/internal/utils"
 	"gopkg.in/yaml.v3"
 )
 
@@ -21,11 +21,11 @@ func GetConfig(configPath string) Config {
     once.Do(func() {
 		data, err := os.ReadFile(configPath)
 		if err != nil {
-			panic(fmt.Errorf("failed to read config file: %s", err))
+			utils.Logger.Fatal("failed to read config file")
 		}
 		err = yaml.Unmarshal(data, &config)
 		if err != nil {
-			panic(fmt.Errorf("failed to unmarshal config: %s", err))
+			utils.Logger.Fatal("failed to unmarshal config")
 		}
 	})
     return config

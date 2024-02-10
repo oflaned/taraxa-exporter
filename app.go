@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/gowizzard/dotenv"
 	"github.com/oflaned/taraxa-exporter/internal/config"
+	"github.com/oflaned/taraxa-exporter/internal/utils"
 )
 
 
@@ -13,17 +11,14 @@ import (
 func main() {
 	err := dotenv.Import(".env")
 	if err != nil {
-		log.Panic("Unable to find .env file")
+		panic("Unable to find .env file")
 	}
 
+	utils.InitLogger()
+	utils.Logger.Info("Server started")
 
 	configPath := dotenv.String("CONFIG_PATH")
 	cfg := config.GetConfig(configPath)
 
-
-	
-	fmt.Println("Apis:")
-	for _, path := range cfg.FilePaths {
-		fmt.Println(path)
-	}
+	utils.Logger.Info("Api:", cfg.FilePaths)
 }
