@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-    FilePaths []string `yaml:"file_paths"`
+    FilePaths []string `yaml:"nodeApi"`
 }
 
 var (
@@ -17,19 +17,16 @@ var (
     config Config
 )
 
-func initializeConfig() {
-	data, err := os.ReadFile("config/config.yaml")
-    if err != nil {
-        panic(fmt.Errorf("failed to read config file: %s", err))
-    }
-
-	err = yaml.Unmarshal(data, &config)
-    if err != nil {
-        panic(fmt.Errorf("failed to unmarshal config: %s", err))
-    }
-}
-
-func GetConfig() Config {
-    once.Do(initializeConfig)
+func GetConfig(configPath string) Config {
+    once.Do(func() {
+		data, err := os.ReadFile(configPath)
+		if err != nil {
+			panic(fmt.Errorf("failed to read config file: %s", err))
+		}
+		err = yaml.Unmarshal(data, &config)
+		if err != nil {
+			panic(fmt.Errorf("failed to unmarshal config: %s", err))
+		}
+	})
     return config
 }
