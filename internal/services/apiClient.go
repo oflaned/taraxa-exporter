@@ -9,12 +9,12 @@ import (
 	"github.com/oflaned/taraxa-exporter/internal/utils"
 )
 
-type nodeData struct {
+type NodeData struct {
 	Synced          bool `json:"synced"`
 	SyncingSeconds  int  `json:"syncing_seconds"`
 }
 
-func NodeMetrics(url string) (bool, error){
+func NodeMetrics(url string) (NodeData, error){
     requestData := map[string]interface{}{
         "jsonrpc": "2.0",
         "method":  "get_node_status",
@@ -22,28 +22,30 @@ func NodeMetrics(url string) (bool, error){
         "id":      1,
     }
 
+    var metrics NodeData
+
     requestBody, err := json.Marshal(requestData)
     if err != nil {
-        return false, err
+        return metrics, err
 	}
 
     resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
     if err != nil {
-        return false, err
+        return metrics, err
     }
     defer resp.Body.Close()
 
 	responseBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return false, err
+        return metrics, err
     }
 
-	var apiData nodeData
-	err = json.Unmarshal([]byte(responseBody), &apiData)
+
+	err = json.Unmarshal([]byte(responseBody), &metrics)
     if err != nil {
-        return false, err
+        return metrics, err
     }
 
-	utils.Logger.Info("url: ", url, " Status of sync: ", apiData.Synced)
-	return apiData.Synced, nil
+	utils.Logger.Info("url: ", url, " Status of sync: ", metrics.Synced)
+	return metrics, nil
 }
