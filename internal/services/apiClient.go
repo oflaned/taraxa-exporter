@@ -27,7 +27,7 @@ func NodeMetrics(url string) (NodeData, error){
     requestBody, err := json.Marshal(requestData)
     if err != nil {
         return metrics, err
-	}
+    }
 
     resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
     if err != nil {
@@ -35,17 +35,17 @@ func NodeMetrics(url string) (NodeData, error){
     }
     defer resp.Body.Close()
 
-	responseBody, err := io.ReadAll(resp.Body)
+    responseBody, err := io.ReadAll(resp.Body)
     if err != nil {
         return metrics, err
     }
 
 
-	err = json.Unmarshal([]byte(responseBody), &metrics)
+    err = json.Unmarshal([]byte(responseBody), &metrics)
     if err != nil {
         return metrics, err
     }
 
-	utils.Logger.Info("url: ", url, " Status of sync: ", metrics.Synced)
-	return metrics, nil
+    utils.Logger.Info("url: ", url, " Status of sync: ", metrics.Synced)
+    return metrics, nil
 }
