@@ -21,9 +21,10 @@ var (
 )
 
 func RecordMetrics() {
+    api := dotenv.String("METRICS_API")
     go func() {
 	    for {
-            metrics, err := NodeMetrics(dotenv.String("METRICS_API"))
+            metrics, err := NodeMetrics(api)
             if err != nil {
                 utils.Logger.Error("Error while get metrics fromt api.", err)
             }
