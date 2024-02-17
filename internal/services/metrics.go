@@ -28,7 +28,7 @@ func RecordMetrics() {
             if err != nil {
                 utils.Logger.Error("Error while get metrics fromt api.", err)
             }
-
+            utils.Logger.Info(metrics)
             if metrics.Synced {
                 SyncStatus.Set(1);
             } else { 
