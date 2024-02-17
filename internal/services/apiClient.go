@@ -14,8 +14,7 @@ type nodeData struct {
 	SyncingSeconds  int  `json:"syncing_seconds"`
 }
 
-
-func CheckNodeStatus(url string) (bool, error){
+func NodeMetrics(url string) (bool, error){
     requestData := map[string]interface{}{
         "jsonrpc": "2.0",
         "method":  "get_node_status",
